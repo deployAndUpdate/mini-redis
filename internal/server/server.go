@@ -80,6 +80,38 @@ func (srv *Server) handleConn(conn net.Conn) {
 			srv.store.Del(args[1])
 			conn.Write([]byte("OK\n"))
 
+		case "SETTOCHAN":
+			if len(args) != 4 {
+				conn.Write([]byte("ERR wrong number of arguments\n"))
+				continue
+			}
+			srv.store.SetToChan(args[1], args[2], args[3])
+			conn.Write([]byte("OK\n"))
+
+		case "READFROMCHAN":
+			if len(args) != 2 {
+				conn.Write([]byte("ERR wrong number of arguments\n"))
+				continue
+			}
+			srv.store.ReadFromChan(args[1])
+			conn.Write([]byte("OK\n"))
+
+		case "CLOSECHAN":
+			if len(args) != 2 {
+				conn.Write([]byte("ERR wrong number of arguments\n"))
+				continue
+			}
+			srv.store.CloseChan(args[1])
+			conn.Write([]byte("OK\n"))
+
+		case "CREATECHAN":
+			if len(args) != 2 {
+				conn.Write([]byte("ERR wrong number of arguments\n"))
+				continue
+			}
+			srv.store.CreateChan(args[1])
+			conn.Write([]byte("OK\n"))
+
 		default:
 			conn.Write([]byte("ERR unknown command\n"))
 		}
